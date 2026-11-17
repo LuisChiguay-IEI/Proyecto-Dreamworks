@@ -2,9 +2,16 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
 from django.views.static import serve
+from rest_framework.routers import DefaultRouter
 from moduloPeliculas.views import catalogo
+from moduloPeliculas.api_views import PeliculaViewSet, ResenaViewSet
 from online.views import GestionarCaso, CerrarCaso, ValorarSolucion, AccesoInvitado, Index, Inicio, RegisterView, LoginView, ViewRespuestas, logout_view, AgregarNotaInterna, MarcarSolucion
 from administracion.views import NotasInternas, IndexAdmin, BorrarPregunta, GestionUsuarios, EliminarUsuario, ModificarPregunta, AnalyticsIA
+
+# Configuración de rutas para la API REST
+router = DefaultRouter()
+router.register(r'peliculas', PeliculaViewSet)
+router.register(r'resenas', ResenaViewSet)
 
 urlpatterns = [
     path('peliculas/', include('moduloPeliculas.urls')),
@@ -32,6 +39,9 @@ urlpatterns = [
     path('GestionUsuarios/', GestionUsuarios, name='gestion_usuarios'),
     path('EliminarUsuario/<int:idUser>/', EliminarUsuario, name='eliminar_usuario'),
     path('ModificarPregunta/<int:idPregunta>/', ModificarPregunta, name='modificar_pregunta'),
+
+    # Rutas de la API REST (/api/peliculas/ y /api/resenas/)
+    path('api/', include(router.urls)),
 
     # Ruta explícita para servir imágenes de media/ en Render (producción)
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
