@@ -1,0 +1,5 @@
+{% extends "componentes/header.html" %}{% block title %}Notas internas · Centro de ayuda DreamWorks{% endblock %}{% block content %}
+<div class="page-heading"><div><p class="eyebrow">SUPERVISIÓN DEL EQUIPO</p><h1>Notas internas del equipo</h1><p class="meta">Comentarios de técnicos y administradores asociados a las consultas. Solo visibles para el personal autorizado.</p></div></div>
+<div class="actions"><a class="button secondary" href="{% url 'administracion' %}">Historial de consultas</a></div>
+{% for nota in notas %}<section><h2>Consulta #{{ nota.pregunta_id }} · {{ nota.pregunta.Titulo }}</h2><p class="meta">{% if nota.autor %}{{ nota.autor.usuario }} · {{ nota.autor.perfil }}{% else %}Cuenta eliminada{% endif %} · {{ nota.fecha_creacion }}</p><div class="text">{{ nota.contenido|linebreaksbr }}</div><p><a href="{% url 'respuestas' nota.pregunta.Usuario_id nota.pregunta_id %}">Abrir conversación y notas →</a></p></section>{% empty %}<section class="empty-state">Todavía no hay notas internas.</section>{% endfor %}
+{% include 'componentes/paginacion.html' with page=notas %}{% endblock %}

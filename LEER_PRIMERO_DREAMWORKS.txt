@@ -1,0 +1,41 @@
+DREAMWORKS: CATÁLOGO Y CENTRO DE AYUDA
+
+Este es un avance basado en DRACOGAMER_VFinal y en el modelo del catálogo entregado por el profesor. El proyecto integra catálogo, búsqueda, reseñas, consultas y fichas vinculadas. Contiene una copia de db.sqlite3 de la versión recibida, con sus cuentas y datos; consérvala en privado. Si el archivo ya existía en tu equipo, haz una copia antes de reemplazarlo. No hay contraseñas en este documento.
+
+REQUISITOS
+Python instalado y disponible mediante el comando py. Ollama y el modelo configurado son opcionales para la IA; no son necesarios para consultar el catálogo ni crear tickets.
+
+PRIMER INICIO EN WINDOWS (PowerShell)
+1. Extrae este ZIP y abre la carpeta que contiene manage.py en VS Code.
+2. Abre una terminal en esa carpeta y ejecuta, una línea a la vez:
+
+py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe manage.py migrate
+.\.venv\Scripts\python.exe manage.py runserver
+
+3. En tu navegador abre http://127.0.0.1:8000/
+4. Para detener el servidor presiona Ctrl + C en la terminal.
+
+PRÓXIMOS INICIOS
+En la carpeta donde está manage.py:
+.\.venv\Scripts\python.exe manage.py runserver
+
+PRUEBA DE INTEGRACIÓN
+Abre una película > Consultar sobre esta película > inicia sesión > completa la consulta. El campo Película relacionada debería venir seleccionado. Desde el historial abre el detalle de la consulta y selecciona Ver ficha. Un usuario registrado también puede dejar una reseña en la ficha.
+
+IA LOCAL
+El valor por defecto de OLLAMA_MODEL en esta versión es llama3.2. Ollama debe estar ejecutándose y el modelo configurado debe estar instalado. Este ZIP no instala Ollama. Se puede cambiar OLLAMA_MODEL mediante una variable de entorno o un archivo .env local. La IA no fue probada contra un servidor Ollama real en esta entrega.
+
+NOTA VISUAL
+El catálogo usa el fondo exterior de castillo, las nubes del área central y el logo proporcionado. Incluye los afiches entregados para Shrek, Cómo entrenar a tu dragón y Kung Fu Panda; las demás películas mantienen tarjetas de muestra. El fondo de dragones del mockup todavía debe definirse. El centro de ayuda usa una paleta azul nocturna, partículas celestes y el afiche de dragón proporcionado como fondo.
+
+ADMINISTRAR PELÍCULAS
+Inicia sesión con una cuenta de administrador. En el menú Administración selecciona Gestionar películas. También aparece un acceso desde el catálogo cuando la sesión es de administrador. Allí puedes agregar, editar o eliminar películas y subir un afiche JPG, PNG o WebP de hasta 5 MB. Eliminar una película también elimina sus reseñas, pero conserva las consultas y les quita la asociación con esa película.
+
+Esta versión agrega una migración para guardar imágenes. Si ya instalaste el proyecto anteriormente, vuelve a ejecutar pip install -r requirements.txt y manage.py migrate. Guarda tu db.sqlite3 y la carpeta media antes de reemplazar archivos; en media se guardan las imágenes subidas.
+
+FAVORITOS E HISTORIAL DE PELÍCULAS
+Desde la portada puedes iniciar sesión. En la ficha de una película, una cuenta registrada puede agregarla a favoritos o quitarla. El historial registra las fichas visitadas por la cuenta, no indica que la película se haya reproducido. Las listas son privadas por cuenta. Los invitados pueden explorar y mantener sus límites de soporte, y necesitan registrarse para guardar favoritos. Hay una migración nueva; ejecuta manage.py migrate antes de iniciar el servidor.
+
+Si ya tenías una copia con datos nuevos, respalda y conserva el archivo db.sqlite3 y la carpeta media antes de reemplazar la carpeta.

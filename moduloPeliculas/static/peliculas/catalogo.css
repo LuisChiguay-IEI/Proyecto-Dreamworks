@@ -1,0 +1,1090 @@
+:root {
+    color-scheme: dark;
+    --sky: #08152e;
+    --ink: #f5f8ff;
+    --muted: #bfcee2;
+    --line: #83c4fb;
+    --accent: #a3dcff
+}
+
+* {
+    box-sizing: border-box
+}
+
+html {
+    scroll-behavior: smooth
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--ink);
+    font: 15px/1.55 Arial, sans-serif;
+    background: #071126 url('fondo-castillo.png') center center/cover fixed no-repeat
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, rgba(3, 10, 28, .03), rgba(3, 10, 28, .22));
+    pointer-events: none
+}
+
+a {
+    color: inherit;
+    text-decoration: none
+}
+
+button,
+input,
+textarea {
+    font: inherit
+}
+
+button {
+    cursor: pointer
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #b4e8ff;
+    outline-offset: 4px
+}
+
+.catalog-shell {
+    max-width: 1380px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: linear-gradient(180deg, rgba(3, 13, 33, .91), rgba(4, 15, 36, .96));
+    border-left: 1px solid #b8dfff30;
+    border-right: 1px solid #b8dfff30;
+    box-shadow: 0 0 65px #02091dcc
+}
+
+.nav {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 14px 4%;
+    background: #071329e8;
+    border-bottom: 1px solid #a8d6ff30
+}
+
+.logo {
+    white-space: nowrap;
+    font: 700 24px Georgia, serif;
+    letter-spacing: .02em;
+    text-shadow: 0 0 14px #b4e1ff55
+}
+
+.logo:first-letter {
+    color: #b6e6ff
+}
+
+.nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(14px, 2.8vw, 42px);
+    flex-wrap: wrap
+}
+
+.nav nav a {
+    font-size: 14px;
+    color: #e4efff
+}
+
+.nav nav a:hover,
+.nav-active {
+    color: white;
+    text-shadow: 0 0 12px #8cc8ff
+}
+
+.nav-active {
+    border-bottom: 2px solid #a3e0ff;
+    padding-bottom: 6px
+}
+
+.profile {
+    display: inline-flex;
+    padding: 8px 14px;
+    border: 1px solid #8fb6d6;
+    border-radius: 22px;
+    color: #e7f4ff;
+    font-size: 13px
+}
+
+.hero {
+    min-height: 315px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 22px 20px 16px;
+    background: linear-gradient(0deg, #06152de6, transparent 65%), url('nubes-centrales.png') center 58%/cover no-repeat
+}
+
+.hero-logo {
+    display: block;
+    width: min(380px, 63vw);
+    height: auto;
+    max-height: 245px;
+    object-fit: contain;
+    mask-image: radial-gradient(ellipse at center, black 42%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 42%, transparent 75%);
+    filter: drop-shadow(0 0 16px #7cd2ff44)
+}
+
+.hero-caption {
+    color: #c2dafa;
+    font-size: 10px;
+    letter-spacing: .22em;
+    margin: 0
+}
+
+.explore {
+    padding: 28px 5% 24px
+}
+
+.explore-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 20px;
+    flex-wrap: wrap
+}
+
+.eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .17em;
+    color: #9fc9ef;
+    margin: 0 0 6px
+}
+
+.explore h1,
+.support h2,
+.detail h1,
+.reviews h2 {
+    font-family: Georgia, serif;
+    margin: 0;
+    font-weight: 700
+}
+
+.explore h1 {
+    font-size: clamp(27px, 3vw, 39px)
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    border: 1px solid #9ccaf5aa;
+    background: #0c1c39;
+    border-radius: 25px;
+    min-width: min(330px, 100%);
+    overflow: hidden
+}
+
+.search:focus-within {
+    box-shadow: 0 0 15px #8ad9ff77;
+    border-color: #c8ecff
+}
+
+.search input {
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: white;
+    padding: 11px 15px;
+    flex: 1;
+    min-width: 0
+}
+
+.search button {
+    background: transparent;
+    border: 0;
+    color: #d9eeff;
+    font-size: 25px;
+    line-height: 1;
+    padding: 3px 14px
+}
+
+.genres {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 18px 2px 22px;
+    scrollbar-width: thin
+}
+
+.genre {
+    white-space: nowrap;
+    border: 1px solid #53779c;
+    background: #10213e;
+    border-radius: 24px;
+    padding: 7px 17px;
+    font-size: 13px;
+    transition: box-shadow .2s, border-color .2s, background .2s
+}
+
+.genre:hover,
+.genre.selected {
+    background: linear-gradient(180deg, #2969bc, #153a7b);
+    border-color: #a9e4ff;
+    box-shadow: 0 0 14px #66bfffaa, inset 0 0 8px #b7e6ff88;
+    color: #fff
+}
+
+.carousel-wrap {
+    position: relative;
+    padding: 0 35px
+}
+
+.carousel {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: #7badde #10223c;
+    padding: 4px 3px 16px
+}
+
+.movie {
+    scroll-snap-align: start;
+    flex: 0 0 calc((100% - 36px)/3);
+    min-width: 0;
+    background: #0b1c37;
+    border: 1px solid #759bc29c;
+    border-radius: 13px;
+    overflow: hidden;
+    transition: transform .2s, border-color .2s, box-shadow .2s
+}
+
+.movie:hover {
+    transform: translateY(-3px);
+    border-color: #a7e2ff;
+    box-shadow: 0 0 20px #62baff66
+}
+
+.movie-link {
+    display: block;
+    height: 100%
+}
+
+.movie-art {
+    height: 210px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, #31597b, #09182d 75%)
+}
+
+.movie-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block
+}
+
+.movie-art-placeholder {
+    font-size: 55px;
+    color: #addcff
+}
+
+.movie-info {
+    padding: 15px 17px 17px
+}
+
+.movie-info h2 {
+    font: 700 18px Georgia, serif;
+    margin: 0 0 4px
+}
+
+.movie-info p {
+    color: var(--muted);
+    margin: 0 0 8px;
+    font-size: 13px
+}
+
+.movie-info>span {
+    color: #acdfff;
+    font-size: 13px;
+    font-weight: bold
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 84px;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #a0d9ff;
+    border-radius: 50%;
+    color: white;
+    background: #142d50;
+    box-shadow: 0 0 14px #69bdff66;
+    font-size: 26px;
+    line-height: 1
+}
+
+.carousel-arrow:hover {
+    background: #2c6cac
+}
+
+.carousel-arrow.prev {
+    left: 0
+}
+
+.carousel-arrow.next {
+    right: 0
+}
+
+.empty {
+    color: var(--muted);
+    padding: 18px
+}
+
+.support,
+.detail,
+.reviews {
+    margin: 30px 5%;
+    padding: 25px;
+    border: 1px solid #5e8aaf77;
+    border-radius: 14px;
+    background: #0a1b35eF
+}
+
+.support {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px
+}
+
+.support h2 {
+    font-size: 24px
+}
+
+.support p:not(.eyebrow) {
+    color: var(--muted);
+    margin: 8px 0
+}
+
+.button,
+.reviews button {
+    display: inline-block;
+    border: 1px solid #a8e0ff;
+    color: white;
+    background: linear-gradient(180deg, #276dc4, #17447f);
+    border-radius: 9px;
+    padding: 11px 18px;
+    font-weight: 700;
+    box-shadow: 0 0 13px #5dbdff77, inset 0 0 9px #b6e7ff66;
+    transition: transform .2s, box-shadow .2s
+}
+
+.button:hover,
+.reviews button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 22px #9ad8ffbb
+}
+
+.detail {
+    overflow: auto;
+    min-height: 280px
+}
+
+.detail h1 {
+    font-size: clamp(28px, 4vw, 48px)
+}
+
+.detail p {
+    max-width: 730px
+}
+
+.detail a.primary {
+    display: inline-block;
+    border: 1px solid #a8e0ff;
+    color: white;
+    background: linear-gradient(180deg, #276dc4, #17447f);
+    border-radius: 9px;
+    padding: 11px 18px;
+    box-shadow: 0 0 13px #5dbdff77
+}
+
+.detail-poster {
+    float: right;
+    width: min(210px, 36%);
+    border-radius: 10px;
+    margin: 0 0 1rem 2rem
+}
+
+.reviews article {
+    padding: 1rem;
+    margin: 1rem 0;
+    background: #07152a;
+    border-radius: 8px
+}
+
+.reviews textarea,
+.reviews select {
+    display: block;
+    max-width: 650px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #83b8da;
+    border-radius: 7px;
+    background: #0a1930;
+    color: white
+}
+
+.reviews a {
+    color: #acdfff;
+    text-decoration: underline
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #aabdd3;
+    font-size: 12px
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0
+}
+
+@media(max-width:850px) {
+    .movie {
+        flex-basis: calc((100% - 18px)/2)
+    }
+
+    .nav {
+        padding: 14px 5%
+    }
+
+    .hero {
+        min-height: 270px
+    }
+
+    .movie-art {
+        height: 200px
+    }
+}
+
+@media(max-width:560px) {
+    .nav {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px
+    }
+
+    .nav nav {
+        justify-content: flex-start;
+        gap: 14px
+    }
+
+    .nav nav a {
+        font-size: 12px
+    }
+
+    .hero {
+        min-height: 230px
+    }
+
+    .hero-logo {
+        width: min(290px, 75vw);
+        max-height: 180px
+    }
+
+    .hero-caption {
+        font-size: 8px
+    }
+
+    .explore {
+        padding: 20px 4%
+    }
+
+    .explore-heading {
+        align-items: stretch
+    }
+
+    .search {
+        width: 100%
+    }
+
+    .carousel-wrap {
+        padding: 0 28px
+    }
+
+    .movie {
+        flex-basis: 100%
+    }
+
+    .movie-art {
+        height: 240px
+    }
+
+    .carousel-arrow {
+        width: 30px;
+        height: 30px;
+        top: 100px
+    }
+
+    .support {
+        align-items: flex-start;
+        flex-direction: column
+    }
+
+    .support,
+    .detail,
+    .reviews {
+        margin: 22px 4%;
+        padding: 20px
+    }
+
+    .detail-poster {
+        width: 120px;
+        margin-left: 1rem
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    html {
+        scroll-behavior: auto
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important
+    }
+}
+
+/* El cielo de nubes continúa detrás del logo, los filtros y el carrusel. */
+.catalog-shell main {
+    position: relative;
+    isolation: isolate
+}
+
+.catalog-shell main::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: min(1050px, 100%);
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(4, 14, 35, .12) 0%, rgba(4, 14, 35, .14) 40%, rgba(4, 14, 35, .74) 82%, #06152d 100%), url('nubes-centrales.png') center top / cover no-repeat
+}
+
+.hero {
+    background: transparent;
+    min-height: 345px;
+    padding: 12px 20px 0
+}
+
+.hero-logo {
+    width: min(610px, 75vw);
+    max-height: 320px;
+    object-fit: contain;
+    mix-blend-mode: screen;
+    mask-image: radial-gradient(ellipse at center, #000 42%, transparent 76%);
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 42%, transparent 76%);
+    filter: drop-shadow(0 0 22px #8ccfff55)
+}
+
+.hero-caption {
+    margin-top: -6px;
+    text-shadow: 0 2px 10px #06132e
+}
+
+.explore {
+    background: transparent
+}
+
+.carousel {
+    gap: 20px;
+    align-items: stretch
+}
+
+.movie {
+    flex: 0 0 clamp(220px, 24vw, 290px);
+    background: #081a34e8
+}
+
+.movie-art {
+    height: auto;
+    aspect-ratio: 2/3;
+    background: #102540
+}
+
+.movie-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover
+}
+
+.carousel-arrow {
+    top: 35%
+}
+
+@media(max-width:850px) {
+    .hero {
+        min-height: 300px
+    }
+
+    .hero-logo {
+        width: min(520px, 80vw);
+        max-height: 275px
+    }
+
+    .movie {
+        flex-basis: clamp(205px, 36vw, 260px)
+    }
+}
+
+@media(max-width:560px) {
+    .catalog-shell main::before {
+        background-size: auto 900px;
+        background-position: center top
+    }
+
+    .hero {
+        min-height: 220px
+    }
+
+    .hero-logo {
+        width: min(390px, 90vw);
+        max-height: 205px
+    }
+
+    .movie {
+        flex-basis: min(72vw, 260px)
+    }
+
+    .movie-art {
+        height: auto;
+        aspect-ratio: 2/3
+    }
+
+    .carousel-arrow {
+        top: 34%
+    }
+}
+
+/* Ajuste del catálogo: dejar visible el paisaje y suavizar el cielo. */
+.catalog-shell {
+    max-width: 1100px;
+    background: linear-gradient(180deg, rgba(3, 13, 33, .84), rgba(4, 15, 36, .95))
+}
+
+.catalog-shell main::before {
+    height: min(1120px, 100%);
+    background: linear-gradient(to bottom, rgba(3, 13, 33, .35), rgba(3, 13, 33, .22) 45%, rgba(3, 13, 33, .84) 95%), url('nubes-centrales.png') center top / cover no-repeat;
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 75%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 75%, transparent 100%);
+}
+
+.hero {
+    min-height: 320px;
+    padding: 4px 20px 0
+}
+
+.hero-logo {
+    width: min(620px, 72vw);
+    max-height: none;
+    mask-image: radial-gradient(ellipse at center, #000 32%, rgba(0, 0, 0, .9) 48%, transparent 73%);
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 32%, rgba(0, 0, 0, .9) 48%, transparent 73%)
+}
+
+.carousel-wrap {
+    max-width: 800px;
+    margin-inline: auto;
+    padding-inline: 40px
+}
+
+.carousel {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 18px;
+    padding: 4px 2px 12px
+}
+
+.carousel::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0
+}
+
+.movie {
+    flex: 0 0 calc((100% - 36px)/3)
+}
+
+.carousel-arrow {
+    top: 35%;
+    z-index: 2
+}
+
+@media(max-width:850px) {
+    .hero-logo {
+        width: min(560px, 80vw);
+        max-height: none
+    }
+
+    .movie {
+        flex-basis: calc((100% - 18px)/2)
+    }
+}
+
+@media(max-width:560px) {
+    .hero {
+        min-height: 210px
+    }
+
+    .hero-logo {
+        width: min(420px, 90vw)
+    }
+
+    .carousel-wrap {
+        padding-inline: 32px
+    }
+
+    .movie {
+        flex-basis: 100%
+    }
+}
+
+/* Imagen central aprobada: logo y nubes forman una sola escena. */
+.hero {
+    position: relative;
+    isolation: isolate;
+    min-height: 0;
+    aspect-ratio: 2.35/1;
+    padding: 0;
+    overflow: hidden;
+    background: transparent
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: url('logo-nubes.png') center center / cover no-repeat;
+    mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%)
+}
+
+.hero-logo {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0
+}
+
+.hero-caption {
+    display: none
+}
+
+/* El carrusel aprovecha el ancho de la zona de películas. */
+.carousel-wrap {
+    max-width: 100%;
+    padding-inline: 45px
+}
+
+.carousel {
+    gap: 20px
+}
+
+.movie {
+    flex: 0 0 calc((100% - 40px)/3)
+}
+
+@media(max-width:850px) {
+    .hero {
+        min-height: 0;
+        aspect-ratio: 2/1
+    }
+
+    .movie {
+        flex-basis: calc((100% - 20px)/2)
+    }
+}
+
+@media(max-width:560px) {
+    .hero {
+        min-height: 0;
+        aspect-ratio: 1.7/1
+    }
+
+    .carousel-wrap {
+        padding-inline: 34px
+    }
+
+    .movie {
+        flex-basis: 100%
+    }
+}
+
+/* Ajuste fino de la posición del título y del contenido del catálogo. */
+.catalog-shell .explore {
+    position: relative;
+    margin-top: -42px;
+    padding-top: 8px
+}
+
+@media(max-width:560px) {
+    .catalog-shell .explore {
+        margin-top: -22px;
+        padding-top: 8px
+    }
+}
+
+.nav-logout {
+    margin: 0
+}
+
+.nav-logout button,
+.saved-remove button {
+    background: transparent;
+    border: 1px solid #8fb6d6;
+    border-radius: 18px;
+    color: #e7f4ff;
+    padding: 7px 12px;
+    font-size: 13px
+}
+
+.nav-logout button:hover,
+.saved-remove button:hover {
+    background: #244b78
+}
+
+.detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center
+}
+
+.detail-actions form,
+.detail-actions p {
+    margin: 0
+}
+
+.list-page {
+    padding: 40px 5% 70px;
+    min-height: 70vh
+}
+
+.list-page>h1 {
+    font: 700 clamp(28px, 4vw, 42px) Georgia, serif
+}
+
+.list-page>p {
+    color: var(--muted)
+}
+
+.saved-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px
+}
+
+.saved-grid .movie {
+    width: 100%
+}
+
+.saved-grid .movie-art {
+    height: auto;
+    aspect-ratio: 2/3
+}
+
+.saved-remove {
+    padding: 0 17px 17px
+}
+
+.saved-empty {
+    color: var(--muted);
+    padding: 25px;
+    border: 1px solid #53779c;
+    border-radius: 12px
+}
+
+.saved-empty a {
+    color: #a3dcff;
+    text-decoration: underline
+}
+
+/* Hojas y polvo de luz lunar sobre el catálogo. */
+.catalog-ambience {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 10
+}
+
+.catalog-ambience i,
+.catalog-ambience b {
+    position: absolute;
+    display: block;
+    opacity: 0;
+    animation: catalog-fall 20s linear infinite
+}
+
+.catalog-ambience i {
+    top: -24px;
+    width: 13px;
+    height: 7px;
+    border-radius: 90% 0 90% 0;
+    background: linear-gradient(135deg, #e1fbff, #63b9de);
+    box-shadow: 0 0 14px #7edcffaa
+}
+
+.catalog-ambience b {
+    top: -10px;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #d7f7ff;
+    box-shadow: 0 0 8px 2px #67cfff;
+    animation-duration: 15s
+}
+
+.catalog-ambience :nth-child(1) {
+    left: 4%;
+    animation-delay: -2s
+}
+
+.catalog-ambience :nth-child(2) {
+    left: 15%;
+    animation-delay: -10s
+}
+
+.catalog-ambience :nth-child(3) {
+    left: 39%;
+    animation-delay: -5s
+}
+
+.catalog-ambience :nth-child(4) {
+    left: 65%;
+    animation-delay: -14s
+}
+
+.catalog-ambience :nth-child(5) {
+    left: 88%;
+    animation-delay: -8s
+}
+
+.catalog-ambience :nth-child(6) {
+    left: 96%;
+    animation-delay: -17s
+}
+
+.catalog-ambience :nth-child(7) {
+    left: 8%;
+    animation-delay: -9s
+}
+
+.catalog-ambience :nth-child(8) {
+    left: 27%;
+    animation-delay: -3s
+}
+
+.catalog-ambience :nth-child(9) {
+    left: 50%;
+    animation-delay: -12s
+}
+
+.catalog-ambience :nth-child(10) {
+    left: 72%;
+    animation-delay: -5s
+}
+
+.catalog-ambience :nth-child(11) {
+    left: 84%;
+    animation-delay: -11s
+}
+
+.catalog-ambience :nth-child(12) {
+    left: 94%;
+    animation-delay: -6s
+}
+
+@keyframes catalog-fall {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) rotate(0)
+    }
+
+    12% {
+        opacity: .8
+    }
+
+    85% {
+        opacity: .45
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(40px, 105vh, 0) rotate(330deg)
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    .catalog-ambience {
+        display: none
+    }
+}
+
+/* Iluminación del acceso; conservar las partículas y ocultar pétalos solo en el catálogo. */
+.nav nav a.login-glow {
+    background: linear-gradient(180deg, #2969bc, #153a7b);
+    border-color: #a9e4ff;
+    box-shadow: 0 0 14px #66bfffaa, inset 0 0 8px #b7e6ff88;
+    color: #fff
+}
+
+.catalog-ambience i {
+    display: none
+}
+
+/* Acciones destacadas para administrar el catálogo. */
+.nav nav a.admin-nav-action {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    border: 1px solid #a9e4ff;
+    border-radius: 22px;
+    padding: 8px 14px;
+    color: #fff;
+    background: linear-gradient(180deg, #2969bc, #153a7b);
+    box-shadow: 0 0 14px #66bfffaa, inset 0 0 8px #b7e6ff88
+}
+
+.nav nav a.admin-nav-action:hover {
+    box-shadow: 0 0 22px #89d7ff, inset 0 0 10px #d0efffaa
+}

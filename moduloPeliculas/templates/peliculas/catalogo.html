@@ -1,0 +1,72 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DreamWorks · Catálogo de películas</title>
+  <link rel="stylesheet" href="{% static 'peliculas/catalogo.css' %}?v=admin-22">
+  <script src="{% static 'peliculas/catalogo.js' %}" defer></script>
+</head>
+<body>
+  <div class="catalog-ambience" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><b></b><b></b><b></b><b></b><b></b><b></b></div>
+  <div class="catalog-shell">
+    <header class="nav">
+      <a class="logo" href="{% url 'peliculas:catalogo' %}" aria-label="DreamWorks, inicio">☾ <span>DreamWorks</span></a>
+      <nav aria-label="Navegación principal">
+        <a href="{% url 'peliculas:catalogo' %}" class="nav-active">Inicio</a>
+        <a href="#explorar">Películas</a>
+        {% if user.is_authenticated %}
+          {% if user.admin %}<a class="admin-nav-action" href="{% url 'peliculas:gestion' %}">Gestionar películas</a>{% endif %}{% if user.admin or user.tecnico %}<a {% if user.admin %}class="admin-nav-action"{% endif %} href="{% url 'administracion' %}">Centro de ayuda</a>{% else %}<a href="{% url 'inicio' user.pk %}">Centro de ayuda</a>{% endif %}
+          {% if not user.es_invitado and not user.admin %}<a href="{% url 'peliculas:mi_lista' 'favoritos' %}">Favoritos ♡</a><a href="{% url 'peliculas:mi_lista' 'historial' %}">Historial</a>{% endif %}
+          <span class="profile">{{ user.nombre|default:user.usuario }} · {{ user.perfil }}</span><form method="post" action="{% url 'Logout' %}" class="nav-logout">{% csrf_token %}<button type="submit">Cerrar sesión</button></form>
+        {% else %}
+          <a href="{% url 'index' %}">Centro de ayuda</a>
+          <a class="profile login-glow" href="{% url 'Login' %}">Iniciar sesión</a>
+        {% endif %}
+      </nav>
+    </header>
+    <main>
+      <section class="hero" aria-label="Bienvenidos a DreamWorks">
+        <img class="hero-logo" src="{% static 'peliculas/dreamworks.jpg' %}" alt="DreamWorks: niño pescando desde la luna">
+        <p class="hero-caption">UN UNIVERSO DE HISTORIAS PARA SOÑAR</p>
+      </section>
+      <section class="explore" id="explorar" aria-labelledby="titulo-catalogo">
+        <div class="explore-heading">
+          <div><p class="eyebrow">DESCUBRE TU PRÓXIMA AVENTURA</p><h1 id="titulo-catalogo">Explora las películas</h1></div>
+          <form method="get" action="{% url 'peliculas:catalogo' %}#explorar" class="search" role="search">
+            <label class="sr-only" for="busqueda">Buscar películas</label>
+            <input id="busqueda" name="q" value="{{ q }}" placeholder="Buscar películas...">
+            {% if genero %}<input type="hidden" name="genero" value="{{ genero }}">{% endif %}
+            <button type="submit" aria-label="Buscar">⌕</button>
+          </form>
+        </div>
+        <nav class="genres" aria-label="Filtrar películas por género">
+          <a class="genre {% if not genero %}selected{% endif %}" href="?{% if q %}q={{ q|urlencode }}{% endif %}#explorar" {% if not genero %}aria-current="page"{% endif %}>✦ Todas</a>
+          {% for valor,nombre in generos %}<a class="genre {% if genero == valor %}selected{% endif %}" href="?genero={{ valor|urlencode }}{% if q %}&amp;q={{ q|urlencode }}{% endif %}#explorar" {% if genero == valor %}aria-current="page"{% endif %}>{{ nombre }}</a>{% endfor %}
+        </nav>
+        <div class="carousel-wrap">
+          <button class="carousel-arrow prev" type="button" data-carousel="prev" aria-label="Películas anteriores">‹</button>
+          <div class="carousel" id="carousel" tabindex="0" aria-label="Películas disponibles">
+            {% for pelicula in peliculas %}
+            <article class="movie">
+              <a href="{% url 'peliculas:detalle' pelicula.pk %}" class="movie-link">
+                <div class="movie-art {% if not pelicula.cartel_url %}movie-art-placeholder{% endif %}">
+                  {% if pelicula.cartel_url %}<img src="{{ pelicula.cartel_url }}" alt="Afiche de {{ pelicula.nombre }}" loading="lazy">{% else %}<span aria-hidden="true">✦</span>{% endif %}
+                </div>
+                <div class="movie-info"><h2>{{ pelicula.nombre }}</h2><p>{{ pelicula.get_genero_display }} · {{ pelicula.duracion }} min</p><span>Ver película <span aria-hidden="true">→</span></span></div>
+              </a>
+            </article>
+            {% empty %}<p class="empty">No encontramos películas. Prueba otra búsqueda o categoría.</p>{% endfor %}
+          </div>
+          <button class="carousel-arrow next" type="button" data-carousel="next" aria-label="Películas siguientes">›</button>
+        </div>
+      </section>
+      <section class="support"><div><p class="eyebrow">ESTAMOS PARA AYUDARTE</p><h2>¿Tienes una consulta?</h2><p>Cuéntanos tu duda sobre alguna película y nuestro equipo te ayudará.</p></div>
+        {% if user.is_authenticated %}{% if user.admin or user.tecnico %}<a class="button" href="{% url 'administracion' %}">Centro de ayuda →</a>{% else %}<a class="button" href="{% url 'inicio' user.pk %}">Centro de ayuda →</a>{% endif %}{% else %}<a class="button" href="{% url 'index' %}">Centro de ayuda →</a>{% endif %}
+      </section>
+    </main>
+    <footer>DreamWorks · Proyecto académico</footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends "componentes/header.html" %}
+{% block title %}Centro de ayuda · DreamWorks{% endblock %}
+{% block body_class %}help-dashboard{% endblock %}
+{% block content %}
+<div class="help-welcome"><p class="eyebrow">✧ CENTRO DE AYUDA ✧</p><h1>¿Cómo podemos ayudarte?</h1><p>Gestiona tus consultas, revisa su estado y recibe apoyo sobre el catálogo de películas.</p><span class="status-pill">{{ consultas_activas }} / {{ limite_soporte }} consultas abiertas</span></div>
+{% if user.es_invitado %}<aside class="guest-banner"><div><strong>Estás explorando como invitado</strong><p>Te quedan {{ ia_restantes }} solicitudes de IA. Crea una cuenta para ampliar tu acceso y conservar tu consulta.</p></div><a class="button" href="{% url 'Register' %}">Crear cuenta →</a></aside>{% endif %}
+<div class="help-layout">
+  <aside class="help-sidebar help-frame" aria-label="Opciones del centro de ayuda">
+    <a class="button help-create" href="#formulario-pregunta">＋ Crear consulta</a>
+    <a href="#mis-consultas">▤ &nbsp; Mis consultas</a>
+    <a href="#mis-consultas">✓ &nbsp; Consultas y estados</a>
+    <a href="#asistente">✧ &nbsp; Asistente de IA</a>
+    <a href="{% url 'peliculas:catalogo' %}">← &nbsp; Volver a películas</a>
+  </aside>
+  <section class="help-list help-frame" id="mis-consultas"><h2>▤ &nbsp; Mis consultas</h2>
+    {% for pregunta in Preguntas %}
+    <div class="help-ticket"><div><strong>{{ pregunta.Titulo }}</strong><span>{% if pregunta.pelicula %}{{ pregunta.pelicula.nombre }}{% else %}Consulta general{% endif %}</span><small>#C-{{ pregunta.pk|stringformat:'04d' }} · {{ pregunta.Fecha_creacion|date:'d M Y' }}</small></div><span class="ticket-badge state-{{ pregunta.estado }}">{{ pregunta.get_estado_display }}</span><button type="button" class="secondary compact" data-open-dialog="consulta-{{ pregunta.pk }}">Ver detalle</button><a href="{% url 'respuestas' user.pk pregunta.pk %}">Ver conversación →</a></div>
+    <dialog id="consulta-{{ pregunta.pk }}" aria-labelledby="titulo-{{ pregunta.pk }}"><h2 id="titulo-{{ pregunta.pk }}">{{ pregunta.Titulo }}</h2><p class="text">{{ pregunta.Pregunta }}</p><p>Estado: {{ pregunta.get_estado_display }}</p><div class="actions"><a class="button" href="{% url 'respuestas' user.pk pregunta.pk %}">Abrir conversación</a><button type="button" class="secondary" data-close-dialog>Cerrar</button></div></dialog>
+    {% empty %}<div class="empty-state">Todavía no tienes consultas. ¡Crea una para comenzar!</div>{% endfor %}
+    {% include 'componentes/paginacion.html' with page=Preguntas %}
+  </section>
+  <section class="help-preview help-frame"><h2>✧ &nbsp; Tu última consulta</h2>{% with ultima=Preguntas.0 %}{% if ultima %}<div class="preview-heading"><div><strong>Consulta #C-{{ ultima.pk|stringformat:'04d' }}</strong><p>{{ ultima.Titulo }}</p></div><span class="ticket-badge state-{{ ultima.estado }}">{{ ultima.get_estado_display }}</span></div><article class="preview-message"><strong>{{ user.nombre|default:user.usuario }}</strong><p>{{ ultima.Pregunta|truncatechars:220 }}</p></article><p class="meta">Abre la conversación para ver las respuestas del equipo y continuar tu consulta.</p><a class="button" href="{% url 'respuestas' user.pk ultima.pk %}">Abrir conversación →</a>{% else %}<p class="meta">Cuando crees una consulta, aquí podrás acceder a tu conversación con soporte.</p><a class="button" href="#formulario-pregunta">Crear mi primera consulta →</a>{% endif %}{% endwith %}</section>
+</div>
+<div class="columns help-forms"><section id="formulario-pregunta" class="help-frame"><p class="eyebrow">ATENCIÓN DEL EQUIPO</p><h2>Nueva consulta</h2><p class="meta">Cuéntanos tu duda y selecciona la película relacionada si corresponde.</p>{% if consultas_activas >= limite_soporte %}<p class="message">Llegaste a tu límite de consultas abiertas. {% if user.es_invitado %}<a href="{% url 'Register' %}">Regístrate para ampliar tu límite.</a>{% else %}Espera a que una consulta sea resuelta o cerrada.{% endif %}</p>{% endif %}<form method="post">{% csrf_token %}{{ form.as_p }}<button {% if consultas_activas >= limite_soporte %}disabled{% endif %}>Crear consulta →</button></form></section>
+<section id="asistente" class="help-frame"><p class="eyebrow">AYUDA AUTOMÁTICA</p><h2>Asistente de IA</h2><p>Describe lo que ocurre y recibe una sugerencia inicial.</p><p class="meta">Las respuestas pueden contener errores. No incluyas datos personales ni contraseñas. Una solicitud por minuto.{% if user.es_invitado %} Máximo de 2 solicitudes por sesión de invitado, incluidos intentos sin respuesta.{% endif %}</p>{% if sin_cupo_ia %}<div class="empty-state"><h3>Ya usaste tus 2 solicitudes</h3><p>Crea una cuenta para seguir consultando al asistente.</p><a class="button" href="{% url 'Register' %}">Crear cuenta</a></div>{% else %}<form method="post" data-loading-form>{% csrf_token %}<input type="hidden" name="accion" value="asistente">{{ ayuda_form.as_p }}<button>Consultar al asistente →</button><p class="loading-text" role="status" hidden>Procesando tu consulta…</p></form>{% endif %}{% if ayuda %}<div class="ai-answer"><h3>Sugerencia</h3><div class="text">{{ ayuda }}</div></div>{% endif %}</section></div>
+{% endblock %}

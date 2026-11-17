@@ -1,0 +1,1 @@
+{% extends "componentes/header.html" %}{% block content %}<section><h1>Modificar consulta #{{ pregunta.pk }}</h1><p>Autor: {{ pregunta.Usuario.usuario }} · Fecha original: {{ pregunta.Fecha_creacion }}</p><form method="post">{% csrf_token %}{{ form.as_p }}<button>Guardar cambios</button> <a href="{% url 'administracion' %}">Volver</a></form></section>{% endblock %}

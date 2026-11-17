@@ -1,0 +1,7 @@
+{% extends 'componentes/header.html' %}
+{% block title %}Eliminar película · DreamWorks{% endblock %}
+{% block content %}
+<p class="eyebrow">ADMINISTRACIÓN DEL CATÁLOGO</p><h1>Eliminar película</h1><section>
+<p>¿Quieres eliminar <strong>{{ pelicula.nombre }}</strong> del catálogo?</p><p>Sus reseñas se eliminarán. Las consultas de soporte se conservarán, pero dejarán de estar vinculadas a esta película.</p>
+<form method="post">{% csrf_token %}<div class="actions"><button class="danger" type="submit">Sí, eliminar película</button><a class="button secondary" href="{% url 'peliculas:gestion' %}">Cancelar</a></div></form></section>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends 'componentes/header.html' %}
+{% block title %}{% if pelicula %}Editar{% else %}Agregar{% endif %} película · DreamWorks{% endblock %}
+{% block content %}
+<p class="eyebrow">ADMINISTRACIÓN DEL CATÁLOGO</p><h1>{% if pelicula %}Editar película{% else %}Agregar película{% endif %}</h1>
+<section><p>Ingresa los datos y, si quieres, sube un afiche JPG, PNG o WebP de hasta 5 MB.</p>
+{% if pelicula.cartel_url %}<p>Imagen actual:</p><img src="{{ pelicula.cartel_url }}" alt="Afiche actual de {{ pelicula.nombre }}" style="max-width:150px;max-height:220px;object-fit:contain;border-radius:8px">{% endif %}
+<form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.as_p }}<div class="actions"><button type="submit">Guardar película</button><a class="button secondary" href="{% url 'peliculas:gestion' %}">Cancelar</a></div></form></section>
+{% endblock %}

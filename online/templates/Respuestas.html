@@ -1,0 +1,47 @@
+{% extends "componentes/header.html" %}
+{% block title %}Conversación · Centro de ayuda DreamWorks{% endblock %}
+{% block body_class %}help-ticket-page{% endblock %}
+{% block content %}
+<p class="eyebrow">CONVERSACIÓN / CONSULTA #{{ Pregunta.pk }}</p><h1>{{ Pregunta.Titulo }}</h1>
+<p class="meta">{{ Pregunta.Usuario.nombre|default:Pregunta.Usuario.usuario }} · {{ Pregunta.Fecha_creacion }} · {{ Pregunta.get_categoria_display }}{% if user.admin or user.tecnico %} · {{ Pregunta.get_prioridad_display }}{% endif %} · {{ Pregunta.get_estado_display }}</p>
+<section class="text">{{ Pregunta.Pregunta }}</section>
+{% if Pregunta.pelicula %}<p>🎬 Película relacionada: <a href="{% url 'peliculas:detalle' Pregunta.pelicula_id %}">{{ Pregunta.pelicula.nombre }} · Ver ficha</a></p>{% endif %}
+{% if user.admin or user.tecnico %}
+<section><h2>Gestionar caso</h2><form method="post" action="{% url 'gestionar_caso' Pregunta.pk %}">{% csrf_token %}{{ gestion_form.as_p }}<button>Actualizar estado y prioridad</button></form></section>
+{% elif user.pk == Pregunta.Usuario_id and Pregunta.estado != 'cerrado' %}
+<form method="post" action="{% url 'cerrar_caso' Pregunta.pk %}" data-confirm="¿Confirmas que tu asunto quedó resuelto y deseas cerrar el caso?">{% csrf_token %}<button>✓ Mi asunto quedó resuelto · Cerrar caso</button></form>
+{% endif %}
+<h2>Conversación</h2>
+{% for respuesta in Respuestas %}
+<article {% if respuesta.es_solucion %}class="respuesta-solucion"{% endif %}>
+    {% if respuesta.es_solucion %}<p class="solucion-etiqueta">✓ Respuesta marcada como solución</p>{% endif %}
+    <strong>{{ respuesta.Usuario.nombre|default:respuesta.Usuario.usuario }}</strong> <span class="meta">{{ respuesta.FechaHora }}</span>
+    <div class="text">{{ respuesta.Respuesta }}</div>
+    {% if user.admin or user.tecnico %}
+    <form method="post" action="{% url 'marcar_solucion' Pregunta.pk respuesta.pk %}">{% csrf_token %}
+    {% if respuesta.es_solucion %}<input type="hidden" name="accion" value="retirar"><button class="secondary">Quitar marca de solución</button>{% else %}<button>Marcar como solución</button>{% endif %}</form>
+    {% elif user.pk == Pregunta.Usuario_id and not respuesta.es_solucion and not tiene_solucion %}
+    <form method="post" action="{% url 'marcar_solucion' Pregunta.pk respuesta.pk %}">{% csrf_token %}<button>Marcar como solución</button></form>
+    {% endif %}
+    {% if respuesta.es_solucion %}
+      {% if respuesta.valoracion_cliente %}<p class="meta">Valoración del cliente: {% if respuesta.valoracion_cliente == 'util' %}✓ Útil{% else %}✗ Insatisfactoria{% endif %}</p>{% endif %}
+      {% if user.pk == Pregunta.Usuario_id and not user.admin and not user.tecnico %}
+      <form method="post" action="{% url 'valorar_solucion' Pregunta.pk respuesta.pk %}" class="actions">{% csrf_token %}<button name="valoracion" value="util" aria-pressed="{% if respuesta.valoracion_cliente == 'util' %}true{% else %}false{% endif %}">✓ Útil</button><button class="secondary" name="valoracion" value="insatisfactoria" aria-pressed="{% if respuesta.valoracion_cliente == 'insatisfactoria' %}true{% else %}false{% endif %}">✗ Insatisfactoria</button></form>
+      {% endif %}
+    {% endif %}
+</article>
+{% empty %}<p>Sin respuestas todavía.</p>{% endfor %}
+{% if Pregunta.estado != 'cerrado' and Pregunta.estado != 'resuelto' %}<section><h2>Enviar respuesta</h2><form method="post">{% csrf_token %}{{ form.as_p }}<button>Enviar</button></form></section>{% else %}<p class="message">Chat terminado. Puedes revisar el historial y valorar la solución. El personal puede reabrir el caso si necesita continuar la atención.</p>{% endif %}
+{% if user.admin or user.tecnico %}
+<section class="notas-personal">
+    <h2>Notas internas del personal</h2>
+    <p>Estas observaciones solo son visibles para técnicos y administradores. No se publican en la conversación del cliente.</p>
+    {% for nota in notas_internas %}
+    <article><strong>{{ nota.autor.usuario|default:'Usuario eliminado' }}</strong> <span class="meta">{{ nota.fecha_creacion }}</span><div class="text">{{ nota.contenido }}</div></article>
+    {% empty %}<p>No hay notas internas para esta consulta.</p>{% endfor %}
+    <form method="post" action="{% url 'agregar_nota_interna' Pregunta.pk %}">
+        {% csrf_token %}{{ nota_form.as_p }}<button>Guardar nota interna</button>
+    </form>
+</section>
+{% endif %}
+{% endblock %}

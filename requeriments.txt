@@ -1,0 +1,2 @@
+# Compatibilidad con el nombre original. Usar requirements.txt.
+-r requirements.txt

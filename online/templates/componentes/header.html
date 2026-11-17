@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Centro de ayuda DreamWorks{% endblock %}</title>
+<link rel="stylesheet" href="{% static 'draco/fonts.css' %}"><link rel="stylesheet" href="{% static 'app.css' %}?v=peliculas-21"><link rel="stylesheet" href="{% static 'draco.css' %}?v=peliculas-21">{% block links %}{% endblock %}</head>
+<body class="theme-{% if user.is_authenticated %}{{ user.tema }}{% else %}cliente{% endif %} {% block body_class %}{% endblock %}">
+{% include 'componentes/ambiente.html' %}
+{% if request.resolver_match.url_name != "index" %}<header><nav aria-label="Navegación principal">{% if request.resolver_match.url_name != "index" %}<a class="brand" href="{% url 'index' %}"><span class="dragon-seal"><img src="{% static 'draco/logo-chimuelo.jpg' %}" alt="Chimuelo"></span><span class="brand-type">CENTRO DE AYUDA<small>DREAMWORKS</small></span></a>{% endif %}
+<a href="{% url 'peliculas:catalogo' %}">Películas</a>
+{% if user.is_authenticated and not user.es_invitado and not user.admin %}<a href="{% url 'peliculas:mi_lista' 'favoritos' %}">Favoritos</a><a href="{% url 'peliculas:mi_lista' 'historial' %}">Historial de películas</a>{% endif %}
+{% if user.is_authenticated %}
+{% if user.admin or user.tecnico %}<a href="{% url 'administracion' %}">Historial de consultas</a>{% else %}<a href="{% url 'inicio' user.pk %}">Mi espacio</a>{% endif %}
+{% if user.admin %}<details class="nav-menu"><summary>Administración</summary><div class="nav-dropdown"><a href="{% url 'peliculas:gestion' %}">Gestionar películas</a><a href="{% url 'notas_internas' %}">Notas internas del equipo</a><a href="{% url 'gestion_usuarios' %}">Todas las cuentas</a><a href="{% url 'gestion_usuarios' %}?tipo=clientes">Clientes inscritos</a><a href="{% url 'gestion_usuarios' %}?tipo=tecnicos">Técnicos inscritos</a><a href="{% url 'analytics_ia' %}">Estadísticas</a></div></details>{% endif %}
+{% if user.es_invitado %}<a class="nav-register" href="{% url 'Register' %}">Crear cuenta</a>{% if request.resolver_match.url_name != "Login" %}<a href="{% url 'Login' %}">Ingresar</a>{% endif %}{% endif %}
+<span class="identity">{{ user.nombre|default:user.usuario }} <span class="badge">{{ user.perfil }}</span></span>
+<form method="post" action="{% url 'Logout' %}" class="inline">{% csrf_token %}<button class="secondary">Cerrar sesión</button></form>
+{% else %}<a href="{% url 'invitado' %}">Probar como invitado</a>{% if request.resolver_match.url_name != "Login" %}<a href="{% url 'Login' %}">Ingresar</a>{% endif %}<a class="button" href="{% url 'Register' %}">Crear cuenta</a>{% endif %}</nav></header>{% endif %}
+<main>{% if messages %}<div aria-live="polite">{% for message in messages %}<p class="message {{ message.tags }}">{{ message }}</p>{% endfor %}</div>{% endif %}{% block content %}{% endblock %}</main>
+<footer><div><strong>DREAMWORKS <span>Centro de ayuda</span></strong><p>Estamos aquí para ayudarte con tus películas.</p></div></footer>
+<script src="{% static 'app.js' %}?v=peliculas-21" defer></script>{% block js %}{% endblock %}</body></html>
