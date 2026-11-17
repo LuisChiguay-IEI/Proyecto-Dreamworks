@@ -1,7 +1,7 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
-from django.conf.urls.static import static
+from django.views.static import serve
 from moduloPeliculas.views import catalogo
 from online.views import GestionarCaso, CerrarCaso, ValorarSolucion, AccesoInvitado, Index, Inicio, RegisterView, LoginView, ViewRespuestas, logout_view, AgregarNotaInterna, MarcarSolucion
 from administracion.views import NotasInternas, IndexAdmin, BorrarPregunta, GestionUsuarios, EliminarUsuario, ModificarPregunta, AnalyticsIA
@@ -32,7 +32,7 @@ urlpatterns = [
     path('GestionUsuarios/', GestionUsuarios, name='gestion_usuarios'),
     path('EliminarUsuario/<int:idUser>/', EliminarUsuario, name='eliminar_usuario'),
     path('ModificarPregunta/<int:idPregunta>/', ModificarPregunta, name='modificar_pregunta'),
-]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Ruta explícita para servir imágenes de media/ en Render (producción)
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+]
